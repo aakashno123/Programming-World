@@ -6,11 +6,6 @@ import numpy as np
 import cv2 as cv
 import sys
 import imutils 
-from matplotlib import pyplot as plt 
-import matplotlib.image as mpimg
-
-
-
 
 root=tk.Tk()
 root.withdraw()
@@ -27,11 +22,11 @@ cv.destroyAllWindows()
 
 newImg=np.zeros(imgR.shape,imgR.dtype)
 
-zz=float(input("Enter the value of zz: "))
+contrast=float(input("Enter the value of color boosting[1-3]: "))
 for y in range(imgR.shape[0]):
     for x in range(imgR.shape[1]):
         for c in range(imgR.shape[2]):
-            newImg[y,x,c]=np.clip(zz*imgR[y,x,c],0,255)
+            newImg[y,x,c]=np.clip(contrast*imgR[y,x,c],0,255)
 
 #newImg=cv.bilateralFilter(newImg.copy(),7,15,15)
 
@@ -41,7 +36,7 @@ cv.destroyAllWindows()
 
 hsv=cv.cvtColor(newImg,cv.COLOR_BGR2HSV)
 
-# For white
+# Range of white color.
 lower_white = np.array([0,0,180], dtype=np.uint8)
 upper_white = np.array([180,38,255], dtype=np.uint8)
 
@@ -49,8 +44,8 @@ imgW=cv.inRange(hsv,lower_white,upper_white)
 cv.imshow("white",imgW)
 cv.waitKey(0)
 cv.destroyAllWindows()
-#Guilt and regret have killed many a man before their time.
-# For yellow
+
+# Range of yellow color.
 lower_yellow = np.array([20, 39, 64], dtype=np.uint8)
 upper_yellow = np.array([40, 255, 255], dtype=np.uint8)
 
@@ -65,16 +60,11 @@ combinedImage=cv.bitwise_or(imgW,imgY)
 cv.imshow("combined Image",combinedImage)
 cv.waitKey(0)
 cv.destroyAllWindows()
-#cv.imwrite("intermediate.jpg",combinedImage)
 
-#text=pyt.image_to_string(newImg)
-#time.sleep(5)
 
-#print("Text extracted :",text)
 
-h,w=combinedImage.shape
-#z=int(input("Enter the size of kernel"))
-rectKernel=cv.getStructuringElement(cv.MORPH_RECT,(15,15))
+ker=int(input("Enter the size of kernel[7-15] :"))
+rectKernel=cv.getStructuringElement(cv.MORPH_RECT,(ker,ker))
 tophat=cv.morphologyEx(combinedImage,cv.MORPH_TOPHAT,rectKernel)
 
 cv.imshow('after filtering',tophat)
