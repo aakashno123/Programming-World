@@ -6,7 +6,7 @@ Required Libraries to install:
 2) Opencv:
     Installation : pip install opencv-python
 3) Pillow and Pytessaract:
-    Installation : pip install pillow
+    Installation : pip install pillow and 
                    pip install pytesseract
                   
 
